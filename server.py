@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import socket
 import threading
+import pickle
+import struct
 
 # https://www.youtube.com/watch?v=3QiPPX-KeSc&t=1384s
 
@@ -9,7 +11,8 @@ FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
 PORT = 5050
 # "192.168.1.151"
-IP_HOST = socket.gethostbyname(socket.gethostname())
+#IP_HOST = socket.gethostbyname(socket.gethostname())
+IP_HOST = "192.168.1.93"
 print(IP_HOST)
 print(socket.gethostname())
 print()
@@ -21,21 +24,29 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
 
+
+#def handle_client(conn, addr):
+   # print(f"[NEW CONNECTION] {addr} connected.")
+   # for _ in range(20):
+   #     msg = conn.recv(1024)
+  #      unpacked = struct.unpack(">I", msg)
+ #       print(unpacked)
+#    conn.close()
+
 def handle_client(conn, addr):
+    data = b''
+    payload_size = struct.calcsize("Q")
     print(f"[NEW CONNECTION] {addr} connected.")
+    while True:
+        while len(data) < payload_size:
+            packet = conn.recv(4 * 1024)
+            if not packet: break
+            data += packet
+        packed_msg_size = data[:payload_size]
+        print("packed_msg_size:: ", packed_msg_size)
+        data = data[payload_size:]
+        print("data:: ", data)
 
-    connected = True
-    while connected:
-        msg_length = conn.recv(HEADER).decode(FORMAT)
-        if msg_length:
-            msg_length = int(msg_length)
-            msg = conn.recv(msg_length).decode(FORMAT)
-            if msg == DISCONNECT_MESSAGE:
-                connected = False
-
-            print(f"[{addr}] - {msg}")
-
-    conn.close()
 
 
 def start():

@@ -1,0 +1,9 @@
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/threading.py", line 954, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.9/threading.py", line 892, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/pi/Server_Files/./server.py", line 33, in handle_client
+    msg_length = int(msg_length)
+ValueError: invalid literal for int() with base 10: '##,imei:863844055635046,A;'
