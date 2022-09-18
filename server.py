@@ -11,8 +11,8 @@ FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
 PORT = 5050
 # "192.168.1.151"
-# IP_HOST = socket.gethostbyname(socket.gethostname())
-IP_HOST = "192.168.1.93"
+IP_HOST = socket.gethostbyname(socket.gethostname())
+# IP_HOST = "192.168.1.93"
 print(IP_HOST)
 print(socket.gethostname())
 print()
@@ -43,9 +43,10 @@ def handle_client(conn, addr):
     connected = True
     while connected:
         # msg_length = conn.recv(2300).decode(FORMAT)
-        msg = conn.recv(2300)
+        msg = conn.recv(1000)
         if msg:
-            print(f"{msg}")
+            my_object = pickle.loads(msg)
+            print(f"{my_object}")
             print()
 
     conn.close()
