@@ -17,7 +17,8 @@ HEADER = 64
 PORT = 5050
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
-IP_HOST = "192.168.1.151"
+# IP_HOST = "192.168.1.151"
+IP_HOST = "98.156.164.8"
 ADDR = (IP_HOST, PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -43,4 +44,5 @@ send(my_object)
 # input()
 # send("Hello brothjtda")
 input()
-send(DISCONNECT_MESSAGE)
+dcnt = pickle.dumps(DISCONNECT_MESSAGE)
+send(dcnt)
