@@ -44,16 +44,20 @@ def handle_client(conn, addr):
         msg = conn.recv(HEADER).decode(FORMAT)
 
         if msg:
+            print(f"[{addr}] {msg}")
             init_result = re.search(r'^[#+]', msg)
             commit_result = re.search(r'^\d+', msg)
             if msg == DISCONNECT_MESSAGE:
                 connected = False
             elif init_result:
                 conn.send("LOAD".encode(FORMAT))
+                print("SENT: 'LOAD'")
             elif commit_result:
                 conn.send("ON".encode(FORMAT))
-            else:
-                print(f"[{addr}] {msg}")
+                print("SENT: 'ON'")
+
+
+
 
 
     conn.close()
