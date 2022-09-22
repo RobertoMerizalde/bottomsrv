@@ -1,48 +1,49 @@
 #!/usr/bin/env python3
+
 import socket
-import pickle
-
-my_dict = {
-    "lon": -4323.243,
-    "lat": 532.533,
-    "name": "gps-coord.",
-    "city": "Austin"
-}
-
-
-
-
+import re
 
 HEADER = 64
 PORT = 5050
-FORMAT = "utf-8"
+FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
-# IP_HOST = "192.168.1.151"
-IP_HOST = "98.156.164.8"
-ADDR = (IP_HOST, PORT)
+SERVER = "192.168.1.151"
+ADDR = (SERVER, PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 
-
 def send(msg):
-    # message = msg.encode(FORMAT)
-    message = msg
-    # msg_length = len(message)
-    # send_length = str(msg_length).encode(FORMAT)
-    # send_length += b' ' * (HEADER - len(send_length))
-    # client.send(send_length)
-    client.send(message)
+
+    message = msg.encode(FORMAT)
+    client.sendall(message)
+
+    if msg == 'disconnect':
+        client.close()
+        print("Client Closed")
 
 
-my_object = pickle.dumps(my_dict)
 
 
-send(my_object)
-# input()
-# send("Hello fdf")
-# input()
-# send("Hello brothjtda")
-input()
-dcnt = pickle.dumps(DISCONNECT_MESSAGE)
-send(dcnt)
+
+active = True
+
+while active:
+    send_to_server = input("What would you like to send to the server?: ")
+
+    if send_to_server == "disconnect":
+        active = False
+
+    length_msg = str(len(send_to_server))
+    # whole_msg = f"{length_msg},{send_to_server}"
+
+    send(send_to_server)
+
+
+
+    # recv_msg = client.recv(1048).decode(FORMAT)
+    #
+    # if recv_msg:
+    #     print(recv_msg)
+    # else:
+    #     return
