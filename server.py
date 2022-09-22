@@ -9,13 +9,13 @@ import re
 HEADER = 1024
 FORMAT = "utf-8"
 backlog = 5
-PORT = 8090
-IP_HOST = "192.168.1.93"
+# PORT = 8090
+# IP_HOST = "192.168.1.93"
 
-# PORT = 5050
-# IP_HOST = socket.gethostbyname(socket.gethostname())
-# DISCONNECT_MESSAGE = 'disconnect'
-# print(IP_HOST)
+PORT = 5050
+IP_HOST = socket.gethostbyname(socket.gethostname())
+DISCONNECT_MESSAGE = 'disconnect'
+print(IP_HOST)
 
 
 
@@ -42,11 +42,18 @@ def handle_client(conn, addr):
     while connected:
 
         msg = conn.recv(HEADER).decode(FORMAT)
+
         if msg:
+            init_result = re.search(r'^[#+]', msg)
+            commit_result = re.search(r'^\d+', msg)
             if msg == DISCONNECT_MESSAGE:
                 connected = False
-
-            print(f"[{addr}] {msg}")
+            elif init_result:
+                conn.send("LOAD".encode(FORMAT))
+            elif commit_result:
+                conn.send("ON".encode(FORMAT))
+            else:
+                print(f"[{addr}] {msg}")
 
 
     conn.close()
@@ -80,15 +87,7 @@ def start():
 print("[STARTING] server is starting...")
 start()
 
-# init_result = re.search(r'^[#+]', msg)
-# commit_result = re.search(r'^\d+', msg)
-# if init_result:
-#     conn.send("LOAD".encode(FORMAT))
-# elif commit_result:
-#     conn.send("ON".encode(FORMAT))
-# else:
-#     send_other = input("[COMMAND]: ")
-#     conn.send(send_other.encode(FORMAT))
+
 
 
 # my_object = pickle.loads(msg_length)

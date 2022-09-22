@@ -22,6 +22,13 @@ def send(msg):
         client.close()
         print("Client Closed")
 
+    # recv_msg = client.recv(1048).decode(FORMAT)
+    #
+    # if recv_msg:
+    #     print(recv_msg)
+    # else:
+    #     return
+
 
 
 
@@ -41,9 +48,3 @@ while active:
 
 
 
-    # recv_msg = client.recv(1048).decode(FORMAT)
-    #
-    # if recv_msg:
-    #     print(recv_msg)
-    # else:
-    #     return
